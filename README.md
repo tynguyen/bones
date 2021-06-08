@@ -4,8 +4,6 @@ Read the accompanying [medium article](https://marvinpdroid.medium.com/thing-fin
 
 ## Installation
 
-
-
 Note: This project has been developed on Ubuntu 20.04.
 
 ### Step 1: Get the [Azure Kinect DK camera](https://www.microsoft.com/en-us/p/azure-kinect-dk/8pp5vxmd9nhq?rtc=1&activetab=pivot:overviewtab)
@@ -73,6 +71,11 @@ $ cmake .. -GNinja
 $ ninja
 $ ./bin/bones
 ````
+
+### Step 4 and 5 can be skipped by running
+```
+./install_bones_from_source.sh
+```
 
 ### Known Issues
 * 1. Does not find cpprest when building the package
