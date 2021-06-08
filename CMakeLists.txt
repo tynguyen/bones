@@ -16,6 +16,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 FIND_PACKAGE(k4a REQUIRED)
 FIND_PACKAGE(k4abt REQUIRED)
+#find_package(cpprestsdk REQUIRED NAMES cpprestsdk cpprest)
+FIND_PACKAGE(cpprestsdk REQUIRED) 
+
 
 # These specific settings tell the loader to search the directory of the
 # executable for shared objects. This is done on Linux to emulate the default
@@ -37,5 +40,9 @@ if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_C_COMPILER_ID}" STREQUAL
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed,-rpath-link=${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--as-needed,-rpath-link=${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 endif()
+
+link_libraries(-lcrypto)
+link_libraries(-lboost_system)
+link_libraries(-lGL)
 
 add_subdirectory(products)

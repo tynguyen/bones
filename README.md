@@ -2,15 +2,18 @@ Demonstrates Azure Kinect DK camera body tracking features.  Watch this [youtube
 
 Read the accompanying [medium article](https://marvinpdroid.medium.com/thing-finding-with-kinect-dk-b50470044c56) for a deeper understanding of the APIs and geometry involved.
 
-## Usage
-Note: This project has been developed on Ubuntu 20.04. 
+## Installation
+
+
+
+Note: This project has been developed on Ubuntu 20.04.
 
 ### Step 1: Get the [Azure Kinect DK camera](https://www.microsoft.com/en-us/p/azure-kinect-dk/8pp5vxmd9nhq?rtc=1&activetab=pivot:overviewtab)
 
 ### Step 2: Install the libraries
 The general steps are as outlined in [Microsoft documentation](https://docs.microsoft.com/en-us/azure/Kinect-dk/sensor-sdk-download); but with a couple of hacks to make things work on Ubuntu 20.04.
 - use of 18.04 repo, even though OS is 20.04
-- installed lower versions of tools and libraries (as latest versions of sensor and body tracker don't seem to be compatible on 20.04) 
+- installed lower versions of tools and libraries (as latest versions of sensor and body tracker don't seem to be compatible on 20.04)
 ```
 $ curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
 $ sudo apt-add-repository https://packages.microsoft.com/ubuntu/18.04/prod
@@ -40,15 +43,28 @@ $ k4aviewer
 ````sudo apt-get install libeigen3-dev````
 
 4. Obtain an Azure Vision subscription and store endpoint and key in `AZURE_VISION_ENDPOINT` and `AZURE_VISION_KEY` environment variables respectively.
- 
+NOTE: for Ty, put the following lines into ~/.bashrc file,
+```
+export AZURE_VISION_ENDPOINT=https://saicny-kinect.cognitiveservices.azure.com/
+export AZURE_VISION_KEY=c55de550b6ae4d94841c8775ecf50425
+```
+
 ### Step 4: Clone this project
 
-````
+```
 $ git clone --recursive https://github.com/mpdroid/bones
-````
-- `cilantro` will also be cloned as a submodule in `products/extern/cilantro`.
+```
 
-### Step 5: Build and run  
+cilantro will also be cloned as a submodule in products/extern/cilantro
+
+You can also do 2 steps:
+```
+git clone https://github.com/mpdroid/bones
+cd bones
+git submodule update --init  --recursive
+```
+
+### Step 5: Build and run
 ````
 $ cd bones
 $ mkdir build
@@ -57,6 +73,28 @@ $ cmake .. -GNinja
 $ ninja
 $ ./bin/bones
 ````
+
+### Known Issues
+* 1. Does not find cpprest when building the package
+Solve: Build cpprest from source using attached file `install_cpprest_from_source.sh` and then add the following line to CMakeLists.txt
+```
+find_package(cpprestsdk REQUIRED)
+```
+
+* 2. /usr/lib/x86_64-linux-gnu/libGL.so.1: error adding symbols: DSO missing from command line
+Solve: add the following lines to CMakeLists.txt
+```
+link_libraries(-lGL)
+```
+If there are similar errors, adding corresponding lines, for example
+```
+link_libraries(-lcrypto) #libcrypto.so
+link_libraries(-lboost_system)
+```
+Another package necessary is OpenCV installed from source.
+
+
+## Usage
 If all has gone well, you should see the below instructions flash by before camera display is rendered on your monitor;
 - Press 'L' for light sabers...
 - Press 'O' for object detection; Point with right hand to trigger detection...
